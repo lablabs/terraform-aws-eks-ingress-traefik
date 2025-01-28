@@ -10,7 +10,7 @@ module "crds" {
   enabled = local.crds_enabled
 
   # variable priority var.crds_* (provided by the module user) > local.crds.* (universal addon default override) > default (universal addon default)
-  namespace = local.addon_namespace # Controlled by the addon module
+  namespace = "" # CRDs are cluster-wide resources
 
   helm_enabled                    = var.crds_helm_enabled != null ? var.crds_helm_enabled : try(local.crds.helm_enabled, true)
   helm_release_name               = local.crds_helm_release_name
@@ -18,7 +18,7 @@ module "crds" {
   helm_chart_version              = var.crds_helm_chart_version != null ? var.crds_helm_chart_version : local.crds.helm_chart_version
   helm_atomic                     = var.crds_helm_atomic != null ? var.crds_helm_atomic : try(local.crds.helm_atomic, false)
   helm_cleanup_on_fail            = var.crds_helm_cleanup_on_fail != null ? var.crds_helm_cleanup_on_fail : try(local.crds.helm_cleanup_on_fail, false)
-  helm_create_namespace           = var.helm_create_namespace != null ? var.helm_create_namespace : try(local.addon.helm_create_namespace, true) # Controlled by the addon module
+  helm_create_namespace           = false # CRDs are cluster-wide resources
   helm_dependency_update          = var.crds_helm_dependency_update != null ? var.crds_helm_dependency_update : try(local.crds.helm_dependency_update, false)
   helm_description                = var.crds_helm_description != null ? var.crds_helm_description : try(local.crds.helm_description, "")
   helm_devel                      = var.crds_helm_devel != null ? var.crds_helm_devel : try(local.crds.helm_devel, false)

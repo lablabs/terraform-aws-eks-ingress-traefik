@@ -13,6 +13,11 @@ locals {
     helm_chart_name    = "traefik-crds"
     helm_chart_version = "1.2.0"
     helm_repo_url      = "https://traefik.github.io/charts"
+
+    argo_kubernetes_manifest_wait_fields = {
+      "status.sync.status"   = "Synced"
+      "status.health.status" = "Healthy"
+    }
   }
 
   crds_values = yamlencode({
@@ -25,11 +30,12 @@ locals {
     helm_chart_name    = "traefik"
     helm_chart_version = "34.1.0"
     helm_repo_url      = "https://traefik.github.io/charts"
+    helm_skip_crds     = var.crds_enabled # CRDs are installed by the CRDs module, if enabled
 
     argo_spec = {
       source = {
         helm = {
-          skipCrds = var.crds_enabled
+          skipCrds = var.crds_enabled # CRDs are installed by the CRDs module, if enabled
         }
       }
     }

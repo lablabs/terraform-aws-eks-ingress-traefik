@@ -70,6 +70,10 @@ module "addon" {
 
   settings = var.settings != null ? var.settings : try(local.addon.settings, tomap({}))
   values   = one(data.utils_deep_merge_yaml.values[*].output)
+
+  depends_on = [
+    module.crds
+  ]
 }
 
 data "utils_deep_merge_yaml" "values" {
