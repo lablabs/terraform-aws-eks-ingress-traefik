@@ -28,6 +28,12 @@ variable "crds_helm_repo_url" {
   description = "Helm repository (required)."
 }
 
+variable "crds_helm_create_namespace" {
+  type        = bool
+  default     = null
+  description = "Create the Namespace if it does not yet exist. Defaults to `true`."
+}
+
 variable "crds_settings" {
   type        = map(any)
   default     = null
