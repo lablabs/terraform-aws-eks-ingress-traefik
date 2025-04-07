@@ -7,3 +7,5 @@ variables-addon-oidc.tf
 README.md
 .secrets.baseline
 addon.tf
+addon-irsa.tf
+addon-oidc.tf
