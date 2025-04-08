@@ -1,11 +1,17 @@
 locals {
-  crds_enabled           = var.enabled && var.crds_enabled
+  crds_enabled = var.enabled && var.crds_enabled
+
+  crds_argo_source_type         = var.crds_argo_source_type != null ? var.crds_argo_source_type : try(local.crds.argo_source_type, "helm")
+  crds_argo_source_helm_enabled = local.crds_argo_source_type == "helm"
+
+  crds_argo_name         = var.crds_argo_name != null ? var.crds_argo_name : try(local.crds.argo_name, local.crds.name)
   crds_helm_release_name = var.crds_helm_release_name != null ? var.crds_helm_release_name : try(local.crds.helm_release_name, local.crds.name)
-  crds_helm_chart_name   = var.crds_helm_chart_name != null ? var.crds_helm_chart_name : try(local.crds.helm_chart_name, local.crds.name)
+
+  crds_name = local.crds_argo_source_helm_enabled ? local.crds_helm_release_name : local.crds_argo_name
 }
 
 module "crds" {
-  source = "git::https://github.com/lablabs/terraform-aws-eks-universal-addon.git//modules/addon?ref=v0.0.12"
+  source = "git::https://github.com/lablabs/terraform-aws-eks-universal-addon.git//modules/addon?ref=v0.0.13"
 
   enabled = local.crds_enabled
 
@@ -13,8 +19,8 @@ module "crds" {
   namespace = local.addon_namespace # CRDs are cluster-wide resources, but for a Helm release we need a namespace to be the same as the
 
   helm_enabled                    = var.crds_helm_enabled != null ? var.crds_helm_enabled : try(local.crds.helm_enabled, true)
-  helm_release_name               = local.crds_helm_release_name
-  helm_chart_name                 = local.crds_helm_chart_name
+  helm_release_name               = local.crds_name
+  helm_chart_name                 = var.crds_helm_chart_name != null ? var.crds_helm_chart_name : try(local.crds.helm_chart_name, local.crds.name)
   helm_chart_version              = var.crds_helm_chart_version != null ? var.crds_helm_chart_version : local.crds.helm_chart_version
   helm_atomic                     = var.crds_helm_atomic != null ? var.crds_helm_atomic : try(local.crds.helm_atomic, false)
   helm_cleanup_on_fail            = var.crds_helm_cleanup_on_fail != null ? var.crds_helm_cleanup_on_fail : try(local.crds.helm_cleanup_on_fail, false)
@@ -47,6 +53,11 @@ module "crds" {
   helm_wait                       = var.crds_helm_wait != null ? var.crds_helm_wait : try(local.crds.helm_wait, false)
   helm_wait_for_jobs              = var.crds_helm_wait_for_jobs != null ? var.crds_helm_wait_for_jobs : try(local.crds.helm_wait_for_jobs, false)
 
+  argo_source_type            = var.crds_argo_source_type != null ? var.crds_argo_source_type : try(local.crds.argo_source_type, "helm")
+  argo_source_repo_url        = var.crds_argo_source_repo_url != null ? var.crds_argo_source_repo_url : try(local.crds.argo_source_repo_url, null)
+  argo_source_target_revision = var.crds_argo_source_target_revision != null ? var.crds_argo_source_target_revision : try(local.crds.argo_source_target_revision, null)
+  argo_source_path            = var.crds_argo_source_path != null ? var.crds_argo_source_path : try(local.crds.argo_source_path, null)
+
   argo_apiversion                                        = var.crds_argo_apiversion != null ? var.crds_argo_apiversion : try(local.crds.argo_apiversion, "argoproj.io/v1alpha1")
   argo_destination_server                                = var.crds_argo_destination_server != null ? var.crds_argo_destination_server : try(local.crds.argo_destination_server, "https://kubernetes.default.svc")
   argo_enabled                                           = var.crds_argo_enabled != null ? var.crds_argo_enabled : try(local.crds.argo_enabled, false)
@@ -56,16 +67,19 @@ module "crds" {
   argo_helm_wait_node_selector                           = var.crds_argo_helm_wait_node_selector != null ? var.crds_argo_helm_wait_node_selector : try(local.crds.argo_helm_wait_node_selector, var.crds_argo_helm_wait_node_selector)
   argo_helm_wait_timeout                                 = var.crds_argo_helm_wait_timeout != null ? var.crds_argo_helm_wait_timeout : try(local.crds.argo_helm_wait_timeout, "10m")
   argo_helm_wait_tolerations                             = var.crds_argo_helm_wait_tolerations != null ? var.crds_argo_helm_wait_tolerations : try(local.crds.argo_helm_wait_tolerations, tolist([]))
+  argo_helm_wait_kubectl_version                         = var.crds_argo_helm_wait_kubectl_version != null ? var.crds_argo_helm_wait_kubectl_version : try(local.crds.argo_helm_wait_kubectl_version, "1.32.3")
   argo_info                                              = var.crds_argo_info != null ? var.crds_argo_info : try(local.crds.argo_info, [{ name = "terraform", value = "true" }])
   argo_kubernetes_manifest_computed_fields               = var.crds_argo_kubernetes_manifest_computed_fields != null ? var.crds_argo_kubernetes_manifest_computed_fields : try(local.crds.argo_kubernetes_manifest_computed_fields, ["metadata.labels", "metadata.annotations", "metadata.finalizers"])
   argo_kubernetes_manifest_field_manager_force_conflicts = var.crds_argo_kubernetes_manifest_field_manager_force_conflicts != null ? var.crds_argo_kubernetes_manifest_field_manager_force_conflicts : try(local.crds.argo_kubernetes_manifest_field_manager_force_conflicts, false)
   argo_kubernetes_manifest_field_manager_name            = var.crds_argo_kubernetes_manifest_field_manager_name != null ? var.crds_argo_kubernetes_manifest_field_manager_name : try(local.crds.argo_kubernetes_manifest_field_manager_name, "Terraform")
   argo_kubernetes_manifest_wait_fields                   = var.crds_argo_kubernetes_manifest_wait_fields != null ? var.crds_argo_kubernetes_manifest_wait_fields : try(local.crds.argo_kubernetes_manifest_wait_fields, tomap({}))
   argo_metadata                                          = var.crds_argo_metadata != null ? var.crds_argo_metadata : try(local.crds.argo_metadata, { finalizers = ["resources-finalizer.argocd.argoproj.io"] })
+  argo_name                                              = local.crds_name
   argo_namespace                                         = var.crds_argo_namespace != null ? var.crds_argo_namespace : try(local.crds.argo_namespace, "argo")
   argo_project                                           = var.crds_argo_project != null ? var.crds_argo_project : try(local.crds.argo_project, "default")
   argo_spec                                              = var.crds_argo_spec != null ? var.crds_argo_spec : try(local.crds.argo_spec, tomap({}))
   argo_sync_policy                                       = var.crds_argo_sync_policy != null ? var.crds_argo_sync_policy : try(local.crds.argo_sync_policy, tomap({}))
+  argo_operation                                         = var.crds_argo_operation != null ? var.crds_argo_operation : try(local.crds.argo_operation, tomap({}))
 
   settings = var.crds_settings != null ? var.crds_settings : try(local.crds.settings, tomap({}))
   values   = one(data.utils_deep_merge_yaml.crds_values[*].output)
