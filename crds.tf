@@ -11,7 +11,7 @@ locals {
 }
 
 module "crds" {
-  source = "git::https://github.com/lablabs/terraform-aws-eks-universal-addon.git//modules/addon?ref=v0.0.13"
+  source = "git::https://github.com/lablabs/terraform-aws-eks-universal-addon.git//modules/addon?ref=v0.0.14"
 
   enabled = local.crds_enabled
 
@@ -53,7 +53,7 @@ module "crds" {
   helm_wait                       = var.crds_helm_wait != null ? var.crds_helm_wait : try(local.crds.helm_wait, false)
   helm_wait_for_jobs              = var.crds_helm_wait_for_jobs != null ? var.crds_helm_wait_for_jobs : try(local.crds.helm_wait_for_jobs, false)
 
-  argo_source_type            = var.crds_argo_source_type != null ? var.crds_argo_source_type : try(local.crds.argo_source_type, "helm")
+  argo_source_type            = local.crds_argo_source_type
   argo_source_repo_url        = var.crds_argo_source_repo_url != null ? var.crds_argo_source_repo_url : try(local.crds.argo_source_repo_url, null)
   argo_source_target_revision = var.crds_argo_source_target_revision != null ? var.crds_argo_source_target_revision : try(local.crds.argo_source_target_revision, null)
   argo_source_path            = var.crds_argo_source_path != null ? var.crds_argo_source_path : try(local.crds.argo_source_path, null)
