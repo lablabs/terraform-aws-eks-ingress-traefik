@@ -39,14 +39,6 @@ locals {
     helm_chart_version = "34.1.0"
     helm_repo_url      = "https://traefik.github.io/charts"
     helm_skip_crds     = var.crds_enabled # CRDs are installed by the CRDs module, if enabled
-
-    argo_spec = {
-      source = {
-        helm = {
-          skipCrds = var.crds_enabled # CRDs are installed by the CRDs module, if enabled
-        }
-      }
-    }
   }
 
   addon_values = yamlencode({
