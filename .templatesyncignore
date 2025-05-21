@@ -6,7 +6,6 @@ variables-addon-irsa.tf
 variables-addon-oidc.tf
 README.md
 .secrets.baseline
-addon.tf
 addon-irsa.tf
 addon-oidc.tf
 .github/workflows/renovate.yaml

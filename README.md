@@ -50,8 +50,8 @@ See [basic example](examples/basic) for further information.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_addon"></a> [addon](#module\_addon) | git::https://github.com/lablabs/terraform-aws-eks-universal-addon.git//modules/addon | v0.0.14 |
-| <a name="module_crds"></a> [crds](#module\_crds) | git::https://github.com/lablabs/terraform-aws-eks-universal-addon.git//modules/addon | v0.0.14 |
+| <a name="module_addon"></a> [addon](#module\_addon) | git::https://github.com/lablabs/terraform-aws-eks-universal-addon.git//modules/addon | v0.0.18 |
+| <a name="module_crds"></a> [crds](#module\_crds) | git::https://github.com/lablabs/terraform-aws-eks-universal-addon.git//modules/addon | v0.0.18 |
 ## Resources
 
 | Name | Type |
@@ -115,7 +115,8 @@ See [basic example](examples/basic) for further information.
 | <a name="input_crds_argo_source_repo_url"></a> [crds\_argo\_source\_repo\_url](#input\_crds\_argo\_source\_repo\_url) | ArgoCD Application source repo URL. Required if `argo_source_type` is set to `kustomize` or `directory`. Defaults to `null`. | `string` |
 | <a name="input_crds_argo_source_target_revision"></a> [crds\_argo\_source\_target\_revision](#input\_crds\_argo\_source\_target\_revision) | ArgoCD Application source target revision. Required if `argo_source_type` is set to `kustomize` or `directory`. Defaults to `null`. | `string` |
 | <a name="input_crds_argo_source_type"></a> [crds\_argo\_source\_type](#input\_crds\_argo\_source\_type) | Source type for ArgoCD Application. Can be either `helm`, `kustomize`, or `directory`. Defaults to `helm`. | `string` |
-| <a name="input_crds_argo_spec"></a> [crds\_argo\_spec](#input\_crds\_argo\_spec) | ArgoCD Application spec configuration. Override or create additional spec parameters. Defaults to `{}`. | `any` |
+| <a name="input_crds_argo_spec"></a> [crds\_argo\_spec](#input\_crds\_argo\_spec) | ArgoCD Application spec configuration. Configuration is extended by deep merging with the default spec parameters. Defaults to `{}`. | `any` |
+| <a name="input_crds_argo_spec_override"></a> [crds\_argo\_spec\_override](#input\_crds\_argo\_spec\_override) | ArgoCD Application spec configuration. Configuration is overriden by merging natively with the default spec parameters. Defaults to `{}`. | `any` |
 | <a name="input_crds_argo_sync_policy"></a> [crds\_argo\_sync\_policy](#input\_crds\_argo\_sync\_policy) | ArgoCD Application manifest syncPolicy parameter. Defaults to `{}`. | `any` |
 | <a name="input_crds_enabled"></a> [crds\_enabled](#input\_crds\_enabled) | Set to false to prevent the module from creating CRD resources. | `bool` |
 | <a name="input_crds_helm_atomic"></a> [crds\_helm\_atomic](#input\_crds\_helm\_atomic) | If set, installation process purges chart on fail. The wait flag will be set automatically if atomic is used. Defaults to `false`. | `bool` |

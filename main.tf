@@ -28,9 +28,7 @@ locals {
     }
   }
 
-  crds_values = yamlencode({
-    # FIXME config: add default values here
-  })
+  crds_values = yamlencode({})
 
   addon = {
     name = "ingress-traefik"
@@ -41,7 +39,9 @@ locals {
     helm_skip_crds     = var.crds_enabled # CRDs are installed by the CRDs module, if enabled
   }
 
-  addon_values = yamlencode({
-    # FIXME config: add default values here
-  })
+  addon_values = yamlencode({})
+
+  addon_depends_on = [
+    module.crds
+  ]
 }

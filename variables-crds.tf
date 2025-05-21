@@ -163,7 +163,13 @@ variable "crds_argo_apiversion" {
 variable "crds_argo_spec" {
   type        = any
   default     = null
-  description = "ArgoCD Application spec configuration. Override or create additional spec parameters. Defaults to `{}`."
+  description = "ArgoCD Application spec configuration. Configuration is extended by deep merging with the default spec parameters. Defaults to `{}`."
+}
+
+variable "crds_argo_spec_override" {
+  type        = any
+  default     = null
+  description = "ArgoCD Application spec configuration. Configuration is overriden by merging natively with the default spec parameters. Defaults to `{}`."
 }
 
 variable "crds_argo_operation" {
