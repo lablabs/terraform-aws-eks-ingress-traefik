@@ -28,6 +28,11 @@ module "addon_installation_argo_kubernetes" {
     # insert sample values here
   })
 
+  crds_argo_sync_policy = {
+    automated   = {}
+    syncOptions = ["ServerSideApply=true"]
+  }
+
   argo_sync_policy = {
     automated   = {}
     syncOptions = ["CreateNamespace=true"]
@@ -44,6 +49,11 @@ module "addon_installation_argo_helm" {
   values = yamlencode({
     # insert sample values here
   })
+
+  crds_argo_sync_policy = {
+    automated   = {}
+    syncOptions = ["ServerSideApply=true"]
+  }
 
   argo_sync_policy = {
     automated   = {}
