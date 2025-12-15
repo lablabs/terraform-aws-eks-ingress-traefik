@@ -1,3 +1,9 @@
+variable "crds_enabled" {
+  type        = bool
+  default     = true
+  description = "Set to false to prevent the module from creating CRD resources."
+}
+
 variable "crds_helm_enabled" {
   type        = bool
   default     = null
