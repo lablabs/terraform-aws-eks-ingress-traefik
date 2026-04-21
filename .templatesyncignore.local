@@ -1,0 +1,6 @@
+crds.tf
+variables-crds.tf
+variables-addon-irsa.tf
+variables-addon-oidc.tf
+addon-irsa.tf
+addon-oidc.tf
