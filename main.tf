@@ -59,7 +59,7 @@ locals {
     name = "ingress-traefik"
 
     helm_chart_name    = "traefik"
-    helm_chart_version = "42.1.3"
+    helm_chart_version = "42.1.3" # 3.7.17
     helm_repo_url      = "https://traefik.github.io/charts"
     helm_skip_crds     = var.crds_enabled # CRDs are installed by the CRDs module, if enabled
   }
